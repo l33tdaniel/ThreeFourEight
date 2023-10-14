@@ -5,3 +5,7 @@ int main(){
     return 0;
 }
 
+// Multiplies two numbers
+int multiply(int a, int b) {
+  return a * b;
+}
