@@ -13,3 +13,7 @@ int modulo(int operand1, int operand2){
 	}
 }
 
+// Multiplies two numbers
+int multiply(int a, int b) {
+  return a * b;
+}
