@@ -177,58 +177,53 @@ string parenthesisSimplifier(string input, int indexesToRemove[2]) {
     // now that we have this tempstring, we want to do the operations in it, and then pass it back to the original function as a string
     vector<string> parsed = parseFunction(tempStr);
     string front = input.substr(0, indexesToRemove[0]);
-    string back = input.substr(indexesToRemove[1], input.length());
-
+    string back = input.substr(indexesToRemove[1]+1, input.length());
+    //cout << "Front: " << front << " Back: " << back << " Calculate Parased: " << calculate(parsed) << endl;
     return (front + calculate(parsed) + back); // taking the front (before the substring) adding in the results from where the parenthesis were, and then throwing on the stuff that was in the back as well.
 }
 
 string delimiter_info(string input) {
     string temp = "";
     int parenthCount = 0;
-    for(int i = 0; i < input.length(); i++) {
-        if(input[i] == '('){parenthCount += 1;}
+    for (char c : input) {
+        if (c == '(') {
+            parenthCount++;
+        }
     }
-    // now we would go in order of operations, add everything to a stack while the number is not 0, and we'd decrease it with every pass, after that we return the product to the user, and we're done. I don't wanna do the full thing, but that's a great start!
-
-    string parenthesisGroupings[parenthCount];
+    
+    string parenthesisGroupings;
     int totalParenthCount = parenthCount;
-    int beginning = 0;
     int subStringNums[2];
-    if(parenthCount == 0) {
-
+    int leftParenthCount = 0;
+    string test = input;
+    if (parenthCount == 0) {
         return calculate(parseFunction(input));
     }
-    else{
-        while(parenthCount!=0){
-            // we need to take in a string, subtract a smaller part of the string, and then give it back
-            int leftParenthCount = 0;
-            for(int i = 0; i < input.length(); i++){
-                if(input[i] == '(') { // if we hit an open parentheses
-                    leftParenthCount += 1; // adding one to the amount of parenthesis that we've passed
-                    if(leftParenthCount == parenthCount){
-                        subStringNums[0] = i;
-                        // if the count is at the total count that we're going for (the last index of it)
-                        for(int j = i; j < input.length(); j++){ // for each following letter that is not ')'
-                            if(input[j]!=')'){ 
-                                if(input[j]!='(') {
-                                    parenthesisGroupings[beginning] += input[j];
+    else {
+        while (parenthCount != 0) {
+            for (int i = 0; i < test.length(); i++) {
+                if (test[i] == '(') {
+                    leftParenthCount += 1;
+                    if (leftParenthCount == parenthCount) {
+                        subStringNums[0] = i;  // Use '=' for assignment, not '=='
+                        for (int j = i; j < test.length(); j++) {
+                            if (test[j] != ')') {
+                                if (test[j] != '(') {
+                                    parenthesisGroupings += test[j];
                                 }
                             }
-                            else{ // input[j] == ')'
-                                // we need to make a new string that doesn't have the parts we removed and then break out
-                                subStringNums[1] = j;
-                                string test = parenthesisSimplifier(input, subStringNums);
-                                break;
+                            else {
+                                subStringNums[1] = j;  // Use '=' for assignment, not '=='
+                                test = parenthesisSimplifier(test, subStringNums);
                             }
                         }
                     }
                 }
             }
-            beginning++;
-            parenthCount--;
+            parenthCount -= 1;
         }
     }
-    return "derp";
+    return calculate(parseFunction(test));
 }
 //This test to ensure that every character is valid
 
@@ -249,18 +244,17 @@ void gatherInfo(){
     //string expression;
     //cout << "Enter an expression: ";
     //cin >> expression;
-    string expression = "45/2+93+7.356*29+((14)+972/41)";
-    //string expression = "(2+14*3/4+9^2%7-2)"; // answer is 14.5
+    //string expression = "25+(3/2)";
+    string expression = "(2+14*3/4+9^2%7-2)"; // answer is 14.5
     bool isValidParenthesis = isBalancedParanthesis(expression);
     bool validChars; 
     for(int i = 0; i < expression.size(); i++){
         validChars = validChar(expression[i]);
     }
     if(validChars && isValidParenthesis){
+        cout << "\nThe input is valid, now calculating" << endl;
         string output = delimiter_info(expression);
         cout << "Output: " << output;
-        // now we have to start splitting up the code using our delimiters...
-        cout << "\nThe input is valid, now calculating" << endl;
     }
     else{
         cout << "\nThe input is not valid" << endl;
