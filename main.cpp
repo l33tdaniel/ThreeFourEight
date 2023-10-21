@@ -11,7 +11,7 @@ using namespace std;
 bool isBalancedParanthesis(const string &expression){
     // this goes through to make sure that the amount of parenthesis is even and that everything lines up
     stack<char> stack;
-    for(int i =0; i<expression.length();i++){
+    for(int i =0; i < expression.length(); i++){
         if (expression[i] == '(')
         {
             stack.push(expression[i]);
@@ -160,7 +160,7 @@ vector<string> parseFunction(string input){
                 tempStr += c;
         }
     }
-
+    // cout << "Input into parseFunction: " << input << endl;
     expression.push_back(tempStr); // we do this because if the last thing in the parenthesis is a number, it wouldn't get pushed back otherwise
     // before we return this, we're now going to want to do all the math that we can do now that we've parsed the string
     return expression;
@@ -178,52 +178,59 @@ string parenthesisSimplifier(string input, int indexesToRemove[2]) {
     vector<string> parsed = parseFunction(tempStr);
     string front = input.substr(0, indexesToRemove[0]);
     string back = input.substr(indexesToRemove[1]+1, input.length());
-    //cout << "Front: " << front << " Back: " << back << " Calculate Parased: " << calculate(parsed) << endl;
+    // cout << "Front: " << front << " Back: " << back << " Calculate Parsed: " << calculate(parsed) << " What would be returned from ParenthesisSimplifier: " << front + calculate(parsed) + back << endl;
     return (front + calculate(parsed) + back); // taking the front (before the substring) adding in the results from where the parenthesis were, and then throwing on the stuff that was in the back as well.
 }
 
 string delimiter_info(string input) {
-    string temp = "";
-    int parenthCount = 0;
-    for (char c : input) {
-        if (c == '(') {
-            parenthCount++;
-        }
-    }
-    
-    string parenthesisGroupings;
-    int totalParenthCount = parenthCount;
-    int subStringNums[2];
-    int leftParenthCount = 0;
     string test = input;
-    if (parenthCount == 0) {
-        return calculate(parseFunction(input));
-    }
-    else {
-        while (parenthCount != 0) {
-            for (int i = 0; i < test.length(); i++) {
-                if (test[i] == '(') {
-                    leftParenthCount += 1;
-                    if (leftParenthCount == parenthCount) {
-                        subStringNums[0] = i;  // Use '=' for assignment, not '=='
-                        for (int j = i; j < test.length(); j++) {
-                            if (test[j] != ')') {
-                                if (test[j] != '(') {
-                                    parenthesisGroupings += test[j];
+    try{
+        string temp = "";
+        int parenthCount = 0;
+        for (char c : input) {
+            if (c == '(') {
+                parenthCount++;
+            }
+        }
+        string parenthesisGroupings;
+        int subStringNums[2];
+        int leftParenthCount = 0;
+        if (parenthCount == 0) {
+            return calculate(parseFunction(input));
+        }
+        else {
+            while (parenthCount != 0) {
+                for (int i = 0; i < test.length(); i++) {
+                    if (test[i] == '(') {
+                        leftParenthCount += 1;
+                        if (leftParenthCount == parenthCount) {
+                            subStringNums[0] = i;  // Use '=' for assignment, not '=='
+                            for (int j = i; j < test.length(); j++) {
+                                if (test[j] != ')') {
+                                    if (test[j] != '(') {
+                                        parenthesisGroupings += test[j];
+                                    }
                                 }
-                            }
-                            else {
-                                subStringNums[1] = j;  // Use '=' for assignment, not '=='
-                                test = parenthesisSimplifier(test, subStringNums);
+                                else {
+                                    subStringNums[1] = j;  // Use '=' for assignment, not '=='
+                                    test = parenthesisSimplifier(test, subStringNums);
+                                }
                             }
                         }
                     }
                 }
+                parenthCount -= 1;
+                leftParenthCount = 0;
             }
-            parenthCount -= 1;
         }
+        return calculate(parseFunction(test));
     }
-    return calculate(parseFunction(test));
+    catch (const invalid_argument& e) {
+        cerr << "Invalid argument: " << e.what() << endl;
+        // Handle the error gracefully, e.g., return a default value or log the error.
+    }
+    cout <<"THIS IS TEST" << test << endl;
+    return "bleh";
 }
 //This test to ensure that every character is valid
 
@@ -245,7 +252,7 @@ void gatherInfo(){
     //cout << "Enter an expression: ";
     //cin >> expression;
     //string expression = "25+(3/2)";
-    string expression = "(2+14*3/4+9^2%7-2)"; // answer is 14.5
+    string expression = "(2+4)-(3+9)-4%2"; 
     bool isValidParenthesis = isBalancedParanthesis(expression);
     bool validChars; 
     for(int i = 0; i < expression.size(); i++){
@@ -258,6 +265,8 @@ void gatherInfo(){
     }
     else{
         cout << "\nThe input is not valid" << endl;
+        cout << "Valid Characters: " << validChars << '\n'; // 1 is true 0 is false
+        cout << "Valid Parenthesis: " << isValidParenthesis << '\n'; // 1 is true 0 is false
     }
 }
 
