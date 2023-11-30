@@ -169,16 +169,35 @@ vector<string> parseFunction(string input){
 string parenthesisSimplifier(string input, int indexesToRemove[2]) {
     // this is going to work on eliminating everything that was originally in parenthesis and then passing back the original string to the function with the result in place of where the parenthesis were
     string tempStr = "";
+    
+    bool containsOperand = false;
+    for(int i = 0; i < input.length(); i++){
+        if (input[i] == '+' || input[i] == '-' || input[i] == '%' || input[i] == '/' || input[i] == '*' || input[i] == '^'){
+            containsOperand = true;
+            continue;
+        }
+    }
+    /*
+    if (!containsOperand){
+        return input.substr(0, 5);
+    }
+    */
+
+
+    // check to see if any special characters are found, and if not 
     for(int i = 0; i < input.length(); i++){
         if(i > indexesToRemove[0] and i < indexesToRemove[1]){
             tempStr+=input[i];
         }
     }
-    // now that we have this tempstring, we want to do the operations in it, and then pass it back to the original function as a string
+    cout <<"front i : " << indexesToRemove[0] << " Front value To remove = " << input[indexesToRemove[0]] << " Back value to remove" << input[indexesToRemove[1]] << endl;
+    cout << "Original input: " << input << " tempStr: " << tempStr << endl;
+
     vector<string> parsed = parseFunction(tempStr);
+    //cout << "This is the parsed string from parseFunction" << parsed << endl;
     string front = input.substr(0, indexesToRemove[0]);
-    string back = input.substr(indexesToRemove[1]+1, input.length());
-    // cout << "Front: " << front << " Back: " << back << " Calculate Parsed: " << calculate(parsed) << " What would be returned from ParenthesisSimplifier: " << front + calculate(parsed) + back << endl;
+    string back  = input.substr(indexesToRemove[1]+1, input.length());
+    cout << "Front: " << front << " Back: " << back << " Calculate Parsed: " << calculate(parsed) << " returned from ParenthesisSimplifier: " << front + calculate(parsed) + back << endl;
 
     return (front + calculate(parsed) + back); // taking the front (before the substring) adding in the results from where the parenthesis were, and then throwing on the stuff that was in the back as well.
 }
@@ -206,7 +225,7 @@ string delimiter_info(string input) {
                     if (output[i] == '(') {
                         leftParenthCount += 1;
                         if (leftParenthCount == parenthCount) {
-                            subStringNums[0] = i;  // Use '=' for assignment, not '=='
+                            subStringNums[0] = i;  // we might want to rethink this
                             for (int j = i; j < output.length(); j++) {
                                 if (output[j] != ')') {
                                     if (output[j] != '(') {
@@ -214,7 +233,7 @@ string delimiter_info(string input) {
                                     }
                                 }
                                 else {
-                                    subStringNums[1] = j;  // Use '=' for assignment, not '=='
+                                    subStringNums[1] = j;  // this one is working right
                                     output = parenthesisSimplifier(output, subStringNums);
                                     cout << "This is output: " << output << endl;
                                 }
@@ -253,31 +272,50 @@ void gatherInfo(string expression){
     //string expression;
     //cout << "Enter an expression: ";
     //cin >> expression;
-    //string expression = "25+(3/2)";
     // string expression = "(2+4)-(3+9)-4%2"; 
     bool isValidParenthesis = isBalancedParanthesis(expression);
-    bool validChars; 
+    bool isValidChars; 
     for(int i = 0; i < expression.size(); i++){
-        validChars = validChar(expression[i]);
+        isValidChars = validChar(expression[i]);
     }
-    if(validChars && isValidParenthesis){
+    if(isValidChars && isValidParenthesis){
+        // if the characters and both the amount and placement of parenthesis is correct, we proceed
         cout << "\nThe input is valid, now calculating" << endl;
         string output = delimiter_info(expression);
         cout << "Output: " << output;
     }
     else{
+        // The input given is invalid, and we will inform the user how it's invalid.
         cout << "\nThe input is not valid" << endl;
-        cout << "Valid Characters: " << validChars << '\n'; // 1 is true 0 is false
-        cout << "Valid Parenthesis: " << isValidParenthesis << '\n'; // 1 is true 0 is false
+        if (!isValidChars) {
+            if(!isValidParenthesis){
+                cout << "There are invalid characters and invalid parenthesis in your input" << endl;
+            }
+            else{
+                cout << "There are invalid characters in your input" << endl;
+            }
+        }
+        else if (!isValidParenthesis){
+            cout << "Your input has invalid parenthesis" << endl;
+        }
     }
 }
 
 int main(){
     // could we start adding references to code instead of passing the copy through so that our code is more efficient? This is the difference between lower level vs higher level thinking.
-    // outputCases();
-	gatherInfo("(22+14/24*(2*8))"); // this will likely cause an error. We should try and check for this
+    
+    //gatherInfo("2+4");
+    gatherInfo("(((2+4)))");
+	//gatherInfo("(22+14/24*(2*8))"); // this will likely cause an error. We should try and check for this
 
     // this breaks it (22+14/24*(2*8))^(4/3)
     //gatherInfo("2+4");
     return 0;
+
+    /*
+    The process of this program:
+    gatherInfo(expression)
+    isValidParenthesis(expression) # checking if there parenthesis match each other
+    isValidChars(expression) # checking if all characters are valid
+    */
 }
