@@ -190,14 +190,14 @@ string parenthesisSimplifier(string input, int indexesToRemove[2]) {
             tempStr+=input[i];
         }
     }
-    cout <<"front i : " << indexesToRemove[0] << " Front value To remove = " << input[indexesToRemove[0]] << " Back value to remove" << input[indexesToRemove[1]] << endl;
-    cout << "Original input: " << input << " tempStr: " << tempStr << endl;
+    //cout <<"front i : " << indexesToRemove[0] << " Front value To remove = " << input[indexesToRemove[0]] << " Back value to remove" << input[indexesToRemove[1]] << endl;
+    //cout << "Original input: " << input << " tempStr: " << tempStr << endl;
 
     vector<string> parsed = parseFunction(tempStr);
     //cout << "This is the parsed string from parseFunction" << parsed << endl;
     string front = input.substr(0, indexesToRemove[0]);
     string back  = input.substr(indexesToRemove[1]+1, input.length());
-    cout << "Front: " << front << " Back: " << back << " Calculate Parsed: " << calculate(parsed) << " returned from ParenthesisSimplifier: " << front + calculate(parsed) + back << endl;
+    //cout << "Front: " << front << " Back: " << back << " Calculate Parsed: " << calculate(parsed) << " returned from ParenthesisSimplifier: " << front + calculate(parsed) + back << endl;
 
     return (front + calculate(parsed) + back); // taking the front (before the substring) adding in the results from where the parenthesis were, and then throwing on the stuff that was in the back as well.
 }
@@ -220,12 +220,13 @@ string delimiter_info(string input) {
             return calculate(parseFunction(input));
         }
         else {
-            while (parenthCount != 0) {
+            while (parenthCount != 0) { // this means there are no parenthesis left
                 for (int i = 0; i < output.length(); i++) {
                     if (output[i] == '(') {
                         leftParenthCount += 1;
                         if (leftParenthCount == parenthCount) {
-                            subStringNums[0] = i;  // we might want to rethink this
+                            cout << "Leftmost index to remove" << output[i] << endl;
+                            subStringNums[0] = i;  // we might want to rethink this. This is grabbing how far through the array it goes before finding parenthesis
                             for (int j = i; j < output.length(); j++) {
                                 if (output[j] != ')') {
                                     if (output[j] != '(') {
@@ -233,9 +234,10 @@ string delimiter_info(string input) {
                                     }
                                 }
                                 else {
-                                    subStringNums[1] = j;  // this one is working right
+                                    subStringNums[1] = j;  // this one is working right. This is grabbing the index of the last element
                                     output = parenthesisSimplifier(output, subStringNums);
                                     cout << "This is output: " << output << endl;
+                                    break; // this is needed, otherwise it just keeps on running
                                 }
                             }
                         }
