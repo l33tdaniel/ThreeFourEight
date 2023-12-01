@@ -61,65 +61,76 @@ double exponentiation(double base, double power) {
     return pow(base, power);
 }
 
-
 string calculate(vector<string> expression){
     // We check in order of Exponents, multiplication, division, modulo, addition, subtraction
     // this is going to do the logic of adding things to the stack and then passing it off to the following functions above. Make sure to use PEMDAS!!!
 
-    vector<string> temp = expression;
+    // Order of Operations: ^*/%-+
+    // what happens for negative numbers? We must consider addition of negatives and stuff like that
 
-        for (int i = 0; i < temp.size(); i++) {
-            if (temp[i] == "^" && i > 0 && i < (temp.size() - 1)) {
-                double result = exponentiation(stod(temp[i - 1]), stod(temp[i + 1]));
-                temp[i - 1] = to_string(result); // Update the base with the result
-                temp.erase(temp.begin() + i, temp.begin() + i + 2); // Erase '^' and exponent elements
+
+        for (int i = 0; i < expression.size(); i++) {
+            if (expression[i] == "^" && i > 0 && i < (expression.size() - 1)) {
+                double result = exponentiation(stod(expression[i - 1]), stod(expression[i + 1]));
+                expression[i - 1] = to_string(result); // Update the base with the result
+                expression.erase(expression.begin() + i, expression.begin() + i + 2); // Erase '^' and exponent elements
                 i -= 2; // Adjust the loop counter after erasing two elements
             }
         }
-        for (int i = 0; i < temp.size(); i++) {
-            if (temp[i] == "*" && i > 0 && i < (temp.size() - 1)) {
-                double result = multiply(stod(temp[i - 1]), stod(temp[i + 1]));
-                temp[i - 1] = to_string(result); // Update the base with the result
-                temp.erase(temp.begin() + i, temp.begin() + i + 2); // Erase '^' and exponent elements
+        for (int i = 0; i < expression.size(); i++) {
+            if (expression[i] == "*" && i > 0 && i < (expression.size() - 1)) {
+                double result = multiply(stod(expression[i - 1]), stod(expression[i + 1]));
+                expression[i - 1] = to_string(result); // Update the base with the result
+                expression.erase(expression.begin() + i, expression.begin() + i + 2); // Erase '^' and exponent elements
                 i -= 2; // Adjust the loop counter after erasing two elements
             }
         }
-        for (int i = 0; i < temp.size(); i++) {
-            if (temp[i] == "/" && i > 0 && i < (temp.size() - 1)) {
-                double result = divide(stod(temp[i - 1]), stod(temp[i + 1]));
-                temp[i - 1] = to_string(result); // Update the base with the result
-                temp.erase(temp.begin() + i, temp.begin() + i + 2); // Erase '^' and exponent elements
+        for (int i = 0; i < expression.size(); i++) {
+            if (expression[i] == "/" && i > 0 && i < (expression.size() - 1)) {
+                double result = divide(stod(expression[i - 1]), stod(expression[i + 1]));
+                expression[i - 1] = to_string(result); // Update the base with the result
+                expression.erase(expression.begin() + i, expression.begin() + i + 2); // Erase '^' and exponent elements
                 i -= 2; // Adjust the loop counter after erasing two elements
             }
         }
-        for (int i = 0; i < temp.size(); i++) {
-            if (temp[i] == "%" && i > 0 && i < (temp.size() - 1)) {
-                double result = modulo(stod(temp[i - 1]), stod(temp[i + 1]));
-                temp[i - 1] = to_string(result); // Update the base with the result
-                temp.erase(temp.begin() + i, temp.begin() + i + 2); // Erase '^' and exponent elements
+        for (int i = 0; i < expression.size(); i++) {
+            if (expression[i] == "%" && i > 0 && i < (expression.size() - 1)) {
+                double result = modulo(stod(expression[i - 1]), stod(expression[i + 1]));
+                expression[i - 1] = to_string(result); // Update the base with the result
+                expression.erase(expression.begin() + i, expression.begin() + i + 2); // Erase '^' and exponent elements
                 i -= 2; // Adjust the loop counter after erasing two elements
             }
         }
-        for (int i = 0; i < temp.size(); i++) {
-            if (temp[i] == "-" && i > 0 && i < (temp.size() - 1)) {
-                double result = subtraction(stod(temp[i - 1]), stod(temp[i + 1]));
-                temp[i - 1] = to_string(result); // Update the base with the result
-                temp.erase(temp.begin() + i, temp.begin() + i + 2); // Erase '^' and exponent elements
+        for (int i = 0; i < expression.size(); i++) {
+            if (expression[i] == "-" && i > 0 && i < (expression.size() - 1)) {
+                double result = subtraction(stod(expression[i - 1]), stod(expression[i + 1]));
+                expression[i - 1] = to_string(result); // Update the base with the result
+                expression.erase(expression.begin() + i, expression.begin() + i + 2); // Erase '^' and exponent elements
                 i -= 2; // Adjust the loop counter after erasing two elements
             }
         }
-        for (int i = 0; i < temp.size(); i++) {
-            if (temp[i] == "+" && i > 0 && i < (temp.size() - 1)) {
-                double result = addition(stod(temp[i - 1]), stod(temp[i + 1]));
-                temp[i - 1] = to_string(result); // Update the base with the result
-                temp.erase(temp.begin() + i, temp.begin() + i + 2); // Erase '^' and exponent elements
+        for (int i = 0; i < expression.size(); i++) {
+            if (expression[i] == "+" && i > 0 && i < (expression.size() - 1)) {
+                if(expression[i+1] == "-"){
+                    cout << "we got to the if line 115";
+                }
+
+                // we have to check if the next index is subtraction. I think we will have to do this for all elements
+
+
+
+                double result = addition(stod(expression[i - 1]), stod(expression[i + 1]));
+                expression[i - 1] = to_string(result); // Update the base with the result
+                expression.erase(expression.begin() + i, expression.begin() + i + 2); // Erase '^' and exponent elements
                 i -= 2; // Adjust the loop counter after erasing two elements
             }
         }
-    return temp[0]; // this is just a placeholder for now. we must change this later.
+    return expression[0]; // this is just a placeholder for now. we must change this later.
 }
 
 vector<string> parseFunction(string input){
+    //cout << "input: " << input << endl; // printing what is passed through
+
     vector<string> expression;
     vector<double> result;
     string tempStr = "";
@@ -136,6 +147,25 @@ vector<string> parseFunction(string input){
                 tempStr = "";
                 expression.push_back("-");
                 break;
+                /*
+                if (i > 0){
+                    if (input[i-1] == '+'){
+                        tempStr = "";
+                        expression.push_back("-");
+                    }
+                }
+                else if (i == 0){
+                    tempStr = "";
+                    expression.push_back("-");
+                }
+                else{
+                    expression.push_back(tempStr);
+                    tempStr = "";
+                    expression.push_back("-");
+                }
+                break;
+                */
+
             case '*':
                 expression.push_back(tempStr);
                 tempStr = "";
@@ -158,48 +188,51 @@ vector<string> parseFunction(string input){
                 break;
             default:
                 tempStr += c;
+                break;
         }
     }
-    // cout << "Input into parseFunction: " << input << endl;
-    expression.push_back(tempStr); // we do this because if the last thing in the parenthesis is a number, it wouldn't get pushed back otherwise
-    // before we return this, we're now going to want to do all the math that we can do now that we've parsed the string
+    expression.push_back(tempStr);
     return expression;
 }
 
 string parenthesisSimplifier(string input, int indexesToRemove[2]) {
-    // this is going to work on eliminating everything that was originally in parenthesis and then passing back the original string to the function with the result in place of where the parenthesis were
-    string tempStr = "";
-    
-    bool containsOperand = false;
-    for(int i = 0; i < input.length(); i++){
-        if (input[i] == '+' || input[i] == '-' || input[i] == '%' || input[i] == '/' || input[i] == '*' || input[i] == '^'){
-            containsOperand = true;
-            continue;
+    // watch for warnings
+    try{
+        // this is going to work on eliminating everything that was originally in parenthesis and then passing back the original string to the function with the result in place of where the parenthesis were
+        string tempStr = "";
+        bool containsOperand = false;
+        /*
+        for(int i = 0; i < input.length(); i++){
+            if (input[i] == '+' || input[i] == '-' || input[i] == '%' || input[i] == '/' || input[i] == '*' || input[i] == '^'){
+                containsOperand = true;
+                continue;
+            }
         }
-    }
-    /*
-    if (!containsOperand){
-        return input.substr(0, 5);
-    }
-    */
+        */
 
-
-    // check to see if any special characters are found, and if not 
-    for(int i = 0; i < input.length(); i++){
-        if(i > indexesToRemove[0] and i < indexesToRemove[1]){
-            tempStr+=input[i];
+        // check to see if any special characters are found, and if not 
+        
+        for(int i = 0; i < input.length(); i++){
+            if(i > indexesToRemove[0] and i < indexesToRemove[1]){
+                tempStr+=input[i];
+            }
         }
+        
+        //cout <<"front i : " << indexesToRemove[0] << " Front value To remove = " << input[indexesToRemove[0]] << " Back value to remove" << input[indexesToRemove[1]] << endl;
+        //cout << "Original input: " << input << " tempStr: " << tempStr << endl;
+
+        vector<string> parsed = parseFunction(tempStr);
+        //cout << "This is the parsed string from parseFunction" << parsed << endl;
+        string front = input.substr(0, indexesToRemove[0]);
+        string back  = input.substr(indexesToRemove[1]+1, input.length());
+        //cout << "Front: " << front << " Back: " << back << " Calculate Parsed: " << calculate(parsed) << " returned from ParenthesisSimplifier: " << front + calculate(parsed) + back << endl;
+
+        return (front + calculate(parsed) + back); // taking the front (before the substring) adding in the results from where the parenthesis were, and then throwing on the stuff that was in the back as well.
     }
-    //cout <<"front i : " << indexesToRemove[0] << " Front value To remove = " << input[indexesToRemove[0]] << " Back value to remove" << input[indexesToRemove[1]] << endl;
-    //cout << "Original input: " << input << " tempStr: " << tempStr << endl;
-
-    vector<string> parsed = parseFunction(tempStr);
-    //cout << "This is the parsed string from parseFunction" << parsed << endl;
-    string front = input.substr(0, indexesToRemove[0]);
-    string back  = input.substr(indexesToRemove[1]+1, input.length());
-    //cout << "Front: " << front << " Back: " << back << " Calculate Parsed: " << calculate(parsed) << " returned from ParenthesisSimplifier: " << front + calculate(parsed) + back << endl;
-
-    return (front + calculate(parsed) + back); // taking the front (before the substring) adding in the results from where the parenthesis were, and then throwing on the stuff that was in the back as well.
+    catch (const invalid_argument& e) {
+        cerr << "Error in " << __FILE__ << " at line " << __LINE__ << ": Invalid argument - " << e.what() << endl;
+        // Handle the error gracefully, e.g., return a default value or log the error.
+    }
 }
 
 string delimiter_info(string input) {
@@ -217,7 +250,25 @@ string delimiter_info(string input) {
         int subStringNums[2];
         int leftParenthCount = 0;
         if (parenthCount == 0) {
-            return calculate(parseFunction(input));
+            // what happens here if we have negative numbers?
+            vector<string> testing = parseFunction(input);
+            for(int i = 0; i < testing.size(); i++){
+                cout << testing[i] << "    " << i << endl;
+            }
+            cout << "Calculate: " << calculate(parseFunction(input)) << endl;
+            // This is what's passed through: [-,7,+,3]
+
+
+
+
+
+
+
+
+
+
+
+
         }
         else {
             while (parenthCount != 0) { // this means there are no parenthesis left
@@ -225,7 +276,7 @@ string delimiter_info(string input) {
                     if (output[i] == '(') {
                         leftParenthCount += 1;
                         if (leftParenthCount == parenthCount) {
-                            cout << "Leftmost index to remove" << output[i] << endl;
+                            // cout << "Leftmost index to remove" << output[i] << endl;
                             subStringNums[0] = i;  // we might want to rethink this. This is grabbing how far through the array it goes before finding parenthesis
                             for (int j = i; j < output.length(); j++) {
                                 if (output[j] != ')') {
@@ -236,7 +287,7 @@ string delimiter_info(string input) {
                                 else {
                                     subStringNums[1] = j;  // this one is working right. This is grabbing the index of the last element
                                     output = parenthesisSimplifier(output, subStringNums);
-                                    cout << "This is output: " << output << endl;
+                                    // cout << "This is output: " << output << endl;
                                     break; // this is needed, otherwise it just keeps on running
                                 }
                             }
@@ -249,12 +300,12 @@ string delimiter_info(string input) {
         }
         return calculate(parseFunction(output));
     }
-    catch (const invalid_argument& e) {
-        cerr << "Invalid argument: " << e.what() << endl;
-        // Handle the error gracefully, e.g., return a default value or log the error.
-    }
+catch (const invalid_argument& e) {
+    cerr << "Error in " << __FILE__ << " at line " << __LINE__ << ": Invalid argument - " << e.what() << endl;
+    // Handle the error gracefully, e.g., return a default value or log the error.
+}
     cout << "This is the final output" << output << endl;
-    return "Something went wrong";
+    return "Something went wrong ";
 }
 
 bool validChar(char ch){
@@ -282,7 +333,7 @@ void gatherInfo(string expression){
     }
     if(isValidChars && isValidParenthesis){
         // if the characters and both the amount and placement of parenthesis is correct, we proceed
-        cout << "\nThe input is valid, now calculating" << endl;
+        // cout << "\nThe input is valid, now calculating" << endl;
         string output = delimiter_info(expression);
         cout << "Output: " << output;
     }
@@ -306,8 +357,12 @@ void gatherInfo(string expression){
 int main(){
     // could we start adding references to code instead of passing the copy through so that our code is more efficient? This is the difference between lower level vs higher level thinking.
     
-    //gatherInfo("2+4");
-    gatherInfo("(((2+4)))");
+    //gatherInfo("(2+4)*2");
+    //gatherInfo("(((2+4)))");
+    //gatherInfo("7+(-3)");
+    //gatherInfo("4+1+2+4");
+    //gatherInfo("7+-3");
+    gatherInfo("-4*3");
 	//gatherInfo("(22+14/24*(2*8))"); // this will likely cause an error. We should try and check for this
 
     // this breaks it (22+14/24*(2*8))^(4/3)
