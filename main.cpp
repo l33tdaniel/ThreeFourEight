@@ -132,28 +132,10 @@ bool validChar(char ch){
 		return true;
 	}else{
 		return false;
-		//Could make this void and throw error.
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 vector<string> parseFunction(string input){
-    // cout << "input: " << input << endl; // printing what is passed through
-    // myVector.erase(myVector.begin() + indexToRemove);
     for(int i = 0; i < input.size(); i++){
         if (i > 0 && i < input.size()-1) {
             if(input[i] == '-' && input[i-1] == '-'){ // if two consecutive elements in the string are "-", we remove the second instance of - and change the first to plus
@@ -172,7 +154,6 @@ vector<string> parseFunction(string input){
                 input[i-1] = '-';
                 input.erase(input.begin() + i); 
             }
-            // SO CLOSE DANIEL! We just have to do this logic for each of the other ones, and then we will be done.
         }
     }
 
@@ -287,17 +268,13 @@ string delimiter_info(string input) {
         string parenthesisGroupings;
         int subStringNums[2];
         int leftParenthCount = 0;
-        if (parenthCount == 0) {
-            // If there's no parenthesis, we just parse it out
-            cout << "No Parenthesis here! \n";
-        }
+        if (parenthCount == 0) {}
         else {
             while (parenthCount != 0) { // this means there are no parenthesis left
                 for (int i = 0; i < output.length(); i++) {
                     if (output[i] == '(') {
                         leftParenthCount += 1;
                         if (leftParenthCount == parenthCount) {
-                            // cout << "Leftmost index to remove" << output[i] << endl;
                             subStringNums[0] = i;  // we might want to rethink this. This is grabbing how far through the array it goes before finding parenthesis
                             for (int j = i; j < output.length(); j++) {
                                 if (output[j] != ')') {
@@ -324,16 +301,18 @@ catch (const invalid_argument& e) {
     cerr << "Error in " << __FILE__ << " at line " << __LINE__ << ": Invalid argument - " << e.what() << endl;
     // Handle the error gracefully, e.g., return a default value or log the error.
 }
-    cout << "This is the final output" << output << endl;
     return "Something went wrong ";
 }
-void gatherInfo(string expression){
+void gatherInfo(){
     // takes info in from user, checks to make sure it's valid input, then starts passing it through to do the necessary operations
-    /*
-    //string expression;
-    //cout << "Enter an expression: ";
-    //cin >> expression;
-    */
+    
+    string expression;
+    cout << "Enter an expression for the calculator to process, or enter \"stop\" to exit: ";
+    cin >> expression;
+    if (expression == "stop"){ 
+        cout << "\nGoodbye!";
+        return; 
+    }
     string cleaned_expression;
 
     // Iterate through the string and append non-empty characters to the result. This is important for fixing our string
@@ -349,12 +328,13 @@ void gatherInfo(string expression){
     }
     if(isValidChars && isValidParenthesis){
         // if the characters and both the amount and placement of parenthesis is correct, we proceed
-        // cout << "\nThe input is valid, now calculating" << endl;
         string output = delimiter_info(cleaned_expression);
         if (output[0] == '+'){
             output.erase(output.begin());
         }
-        cout << "Output: " << output;
+        output.erase(output.find_last_not_of('0') + 1, std::string::npos);
+        if (output.back() == '.') output.pop_back();
+        cout << "Answer: " << output;
     }
     else{
         // The input given is invalid, and we will inform the user how it's invalid.
@@ -373,22 +353,7 @@ void gatherInfo(string expression){
     }
 }
 
-
 int main(){
-    /*
-    test cases that must be tested:
-        1.  -(-(-3)) + (-4) + (+5) // this does not work
-        2.  7+-3 // this works
-        3.  7+(-3)  // this works
-        4.  ((5 * 2) - ((3 / 1) + ((4 % 3))))    answer should be 6 // this works
-        5.  (((2 ^ (1 + 1)) + ((3 - 1) ^ 2)) / ((4 / 2) % 3)). Answer should be 4 // this works
-        6.  (((((5 - 3))) * (((2 + 1))) + ((2 * 3)))).  Answer should be 12 // this works
-        7.  ((9 + 6)) / ((3 * 1) / (((2 + 2))) - 1).   Answer should be -60 // this works
-        8.  +(-2) * (-3) – ((-4) / (+5))    Answer should be  6.8 // 
-        9.  +2 ^ (-3) // this works
-        10.  -(+2) * (+3) - (-4) / (-5)   Answer should be -6.8
-    */
-    gatherInfo("-(-(-3)) + (-4) + (+5)");
+    gatherInfo();
     return 0;
 }
-
