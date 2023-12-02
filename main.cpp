@@ -305,50 +305,52 @@ catch (const invalid_argument& e) {
 }
 void gatherInfo(){
     // takes info in from user, checks to make sure it's valid input, then starts passing it through to do the necessary operations
-    
-    string expression;
-    cout << "Enter an expression for the calculator to process, or enter \"stop\" to exit: ";
-    cin >> expression;
-    if (expression == "stop"){ 
-        cout << "\nGoodbye!";
-        return; 
-    }
-    string cleaned_expression;
+    while(true){
+        string expression;
+        cout << "\nWelcome to Enter an expression for the calculator to process, or enter \"stop\" to exit: ";
+        cin >> expression;
+        
+        if (expression == "stop"){ 
+            cout << "\nGoodbye!\n";
+            return; 
+        }
+        string cleaned_expression;
 
-    // Iterate through the string and append non-empty characters to the result. This is important for fixing our string
-    for (char c : expression) {
-        if (!std::isspace(c)) {
-            cleaned_expression += c;
-        }
-    }
-    bool isValidParenthesis = isBalancedParanthesis(cleaned_expression);
-    bool isValidChars; 
-    for(int i = 0; i < cleaned_expression.size(); i++){
-        isValidChars = validChar(cleaned_expression[i]);
-    }
-    if(isValidChars && isValidParenthesis){
-        // if the characters and both the amount and placement of parenthesis is correct, we proceed
-        string output = delimiter_info(cleaned_expression);
-        if (output[0] == '+'){
-            output.erase(output.begin());
-        }
-        output.erase(output.find_last_not_of('0') + 1, std::string::npos);
-        if (output.back() == '.') output.pop_back();
-        cout << "Answer: " << output;
-    }
-    else{
-        // The input given is invalid, and we will inform the user how it's invalid.
-        cout << "\nThe input is not valid" << endl;
-        if (!isValidChars) {
-            if(!isValidParenthesis){
-                cout << "There are invalid characters and invalid parenthesis in your input" << endl;
-            }
-            else{
-                cout << "There are invalid characters in your input" << endl;
+        // Iterate through the string and append non-empty characters to the result. This is important for fixing our string
+        for (char c : expression) {
+            if (!std::isspace(c)) {
+                cleaned_expression += c;
             }
         }
-        else if (!isValidParenthesis){
-            cout << "Your input has invalid parenthesis" << endl;
+        bool isValidParenthesis = isBalancedParanthesis(cleaned_expression);
+        bool isValidChars; 
+        for(int i = 0; i < cleaned_expression.size(); i++){
+            isValidChars = validChar(cleaned_expression[i]);
+        }
+        if(isValidChars && isValidParenthesis){
+            // if the characters and both the amount and placement of parenthesis is correct, we proceed
+            string output = delimiter_info(cleaned_expression);
+            if (output[0] == '+'){
+                output.erase(output.begin());
+            }
+            output.erase(output.find_last_not_of('0') + 1, std::string::npos);
+            if (output.back() == '.') output.pop_back();
+            cout << "Answer: " << output;
+        }
+        else{
+            // The input given is invalid, and we will inform the user how it's invalid.
+            cout << "\nThe input is not valid" << endl;
+            if (!isValidChars) {
+                if(!isValidParenthesis){
+                    cout << "There are invalid characters and invalid parenthesis in your input" << endl;
+                }
+                else{
+                    cout << "There are invalid characters in your input" << endl;
+                }
+            }
+            else if (!isValidParenthesis){
+                cout << "Your input has invalid parenthesis" << endl;
+            }
         }
     }
 }
