@@ -1,6 +1,0 @@
-1 Remove warning for range based looks from c++11
-2 Better error handling / messages
-3 Fix (22+14/24*(2*8))^(4/3) and 4///3
-4 Comment out everything
-5 Truncate answer to the necessary digits and nothing more
-6 using return and try catch if something doesn't work. right now I'm getting errors when compiling. how to fix
