@@ -39,14 +39,12 @@ double addition(float a, float b) {
     // adds two numbesr together
     return a + b;
 }
-double divide(float a, float b){
-    // divides two numbers, BUT DOESNT HAVE ERROR HANDLING YET
+double divide(float a, float b) {
+    // divides two numbers, WITH ERROR HANDLING
     if (b != 0) {
-        return a/b;
-    }
-    else {
-        // we will have to do error handling here!
-        return false;
+        return a / b;
+    } else {
+        throw std::invalid_argument("Division by zero is not allowed");
     }
 }
 double subtraction(float a, float b){
@@ -301,7 +299,7 @@ catch (const invalid_argument& e) {
     cerr << "Error in " << __FILE__ << " at line " << __LINE__ << ": Invalid argument - " << e.what() << endl;
     // Handle the error gracefully, e.g., return a default value or log the error.
 }
-    return "Something went wrong ";
+    return "An error occurred! Please try entering in your input again";
 }
 void gatherInfo(){
     // takes info in from user, checks to make sure it's valid input, then starts passing it through to do the necessary operations
